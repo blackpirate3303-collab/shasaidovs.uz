@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Shasaidovs — меню на неделю</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="auth" class="auth hidden"><div class="authbox"><div class="brand"><span class="logo">♨</span><div><h1>Shasaidovs</h1><small>Вкусные планы на каждый день</small></div></div><div id="authTitle"><h2>Добро пожаловать!</h2><p>Войдите, чтобы управлять своим меню.</p></div><form id="authForm"><div class="field"><label>Имя пользователя</label><input id="authName" autocomplete="username" required placeholder="Например, Bahodir"></div><div class="field"><label>Пароль</label><input id="authPass" type="password" autocomplete="current-password" required minlength="4" placeholder="Не менее 4 символов"></div><div id="regExtra" class="field hidden"><label>Повторите пароль</label><input id="authPass2" type="password" minlength="4"></div><button id="authSubmit" style="width:100%">Войти</button></form><div class="authswitch"><span id="switchText">Нет аккаунта?</span> <a href="#" id="switchAuth">Создать аккаунт</a></div><div class="notice">Демо-версия: аккаунты и меню сохраняются только в этом браузере на этом устройстве.</div></div></div>
+<div id="app">
+<header class="top"><div class="brand"><span class="logo">♨</span><div><h1>Shasaidovs</h1><small>Вкусные планы на каждый день</small></div></div><div class="userbar"><span>🔔</span><div class="avatar">👤</div><b id="userLabel">Гость</b><button class="ghost" id="logoutBtn">Выйти</button></div></header>
+<div class="layout"><aside>
+<button class="active" data-view="home">⌂　Главная</button><button data-view="menu">▦　Моё меню</button><button data-view="recipes">♨　Рецепты</button><button data-view="shopping">🛒　Список продуктов</button><button data-view="users" id="usersNav">♙　Пользователи</button><button data-view="profile">☻　Профиль</button><button data-view="settings">⚙　Настройки</button><div class="tagline">Хорошая еда — залог отличного настроения!</div></aside>
+<main>
+<section id="home" class="view active"><div class="columns"><div>
+<div class="hero"><div><h2>Планируйте питание на неделю</h2><p>Создавайте меню, добавляйте любимые блюда, следите за рационом и экономьте время.</p><button id="createMenuBtn">＋ Создать меню на неделю</button></div></div>
+<div class="panel"><div class="week-head"><h3>Меню на неделю</h3><div class="date-nav"><button class="ghost" id="prevWeek">‹</button><span id="weekLabel">Эта неделя</span><button class="ghost" id="nextWeek">›</button></div></div><div id="days" class="days"></div><div id="mealGrid" class="meals"></div></div>
+<div class="panel"><div class="week-head"><h3>Популярные рецепты</h3><button class="secondary" data-goto="recipes">Смотреть все →</button></div><div id="popularRecipes" class="recipes"></div></div>
+</div><div class="sidecol"><div class="panel"><h3>Добро пожаловать!</h3><div style="display:flex;gap:10px;align-items:center"><div class="avatar">👤</div><div>Привет, <b id="welcomeName">гость</b>!<div class="muted">Ваш личный план питания</div></div></div><div class="tip"><b>💡 Совет дня</b>Планируйте меню заранее — это помогает экономить деньги и питаться разнообразнее.</div></div>
+<div class="panel"><h3>📅 Мои меню</h3><div id="savedMenus"></div><button style="width:100%;margin-top:8px" id="createMenuBtn2">＋ Создать новое меню</button></div>
+<div class="panel"><h3>Быстрые действия</h3><div class="quick"><button id="quickRecipe">♨　Добавить рецепт</button><button id="quickMeal">⊕　Добавить блюдо в меню</button><button id="quickShop">🛒　Создать список продуктов</button><button data-goto="users">♙　Управление аккаунтами</button></div></div></div></div></section>
+<section id="menu" class="view"><div class="panel"><div class="week-head"><div><h2 style="margin:0">Моё меню</h2><p class="muted">Управляйте сохранёнными планами питания.</p></div><button id="newMenu">＋ Новое меню</button></div><div id="allMenus"></div></div></section>
+<section id="recipes" class="view"><div class="panel"><div class="week-head"><div><h2 style="margin:0">Рецепты</h2><p class="muted">Добавляйте собственные блюда в свою коллекцию.</p></div><button id="addRecipe">＋ Добавить рецепт</button></div><div id="allRecipes" class="recipes"></div></div></section>
+<section id="shopping" class="view"><div class="panel"><div class="week-head"><div><h2 style="margin:0">Список продуктов</h2><p class="muted">Отмечайте купленные продукты.</p></div><button id="clearShop" class="secondary">Очистить отмеченное</button></div><form id="shopForm" style="display:flex;gap:8px;margin-bottom:15px"><input id="shopInput" placeholder="Например, куриное филе" required style="flex:1;min-width:0;border:1px solid var(--line);padding:10px;border-radius:8px"><button>Добавить</button></form><div id="shopList"></div></div></section>
+<section id="users" class="view"><div class="panel"><h2>Пользователи</h2><p class="muted">Аккаунты, созданные в этом браузере. Для демонстрации — без сервера.</p><div id="usersList"></div><div class="notice">Это не защищённая серверная система: данные хранятся локально в браузере.</div></div></section>
+<section id="profile" class="view"><div class="panel"><h2>Профиль</h2><form id="profileForm"><div class="field"><label>Имя пользователя</label><input id="profileName" required></div><div class="field"><label>Новое имя (для отображения)</label><input id="displayName" required></div><button>Сохранить профиль</button></form></div></section>
+<section id="settings" class="view"><div class="panel"><h2>Настройки</h2><p>Все ваши меню и рецепты хранятся в локальном хранилище браузера.</p><button id="exportBtn">Экспортировать мои данные (JSON)</button> <button class="danger" id="resetBtn">Сбросить мои меню и рецепты</button><div class="notice">Не используйте настоящие или важные пароли в этой демонстрационной версии.</div></div></section>
+</main></div></div>
+<div id="modalRoot"></div>
+<script src="js/app.js"></script>
+</body></html>
