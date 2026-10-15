@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#137b56">
+  <title>Shasaidovs — меню на неделю</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script defer src="js/config.js"></script>
+  <script defer src="js/app.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#"><span class="brand-mark">S</span><span><b>Shasaidovs</b><small>Вкусные планы на каждый день</small></span></a>
+    <div id="topUser" class="top-user hidden"><span id="topUserName"></span><span id="topRole" class="role-pill"></span><button id="logoutBtn" class="btn btn-outline btn-small">Выйти</button></div>
+  </header>
+
+  <main class="container">
+    <section id="authView" class="auth-layout">
+      <div class="auth-intro">
+        <span class="eyebrow">ВАШ ЛИЧНЫЙ ПЛАН ПИТАНИЯ</span>
+        <h1>Вкусная неделя<br><span>начинается здесь.</span></h1>
+        <p>Составляйте меню, собирайте любимые рецепты и планируйте покупки — всё в одном месте.</p>
+        <div class="feature-pills"><span>✓ Меню на 7 дней</span><span>✓ Коллекция рецептов</span><span>✓ Личный аккаунт</span></div>
+      </div>
+      <div class="card auth-card">
+        <div class="tabs"><button id="loginTab" class="tab active" type="button">Вход</button><button id="signupTab" class="tab" type="button">Регистрация</button></div>
+        <form id="authForm">
+          <div id="nameField" class="field hidden"><label for="displayName">Ваше имя</label><input id="displayName" autocomplete="name" placeholder="Например, Bahodir"></div>
+          <div class="field"><label for="email">Электронная почта</label><input id="email" type="email" required autocomplete="email" placeholder="you@example.com"></div>
+          <div class="field"><label for="password">Пароль</label><input id="password" type="password" required minlength="8" autocomplete="current-password" placeholder="Минимум 8 символов"></div>
+          <button id="authSubmit" class="btn btn-primary btn-full" type="submit">Войти</button>
+          <p id="authMessage" class="form-message" aria-live="polite"></p>
+        </form>
+        <p class="fineprint">Регистрация требует подтверждения почты, если оно включено в настройках Supabase.</p>
+      </div>
+    </section>
+
+    <section id="appView" class="hidden">
+      <div class="welcome-banner">
+        <div><span class="eyebrow">SHASAIDOVS • ПЛАНИРОВЩИК ПИТАНИЯ</span><h1>Ваше меню, ваши правила.</h1><p>Добавляйте блюда и организуйте неделю так, как удобно вам.</p></div>
+        <div class="banner-icon">🥗</div>
+      </div>
+      <nav class="main-nav" aria-label="Разделы">
+        <button class="nav-btn active" data-view="weeklyView">Моё меню</button>
+        <button class="nav-btn" data-view="recipesView">Рецепты</button>
+        <button class="nav-btn" data-view="shoppingView">Список покупок</button>
+        <button id="adminNav" class="nav-btn hidden" data-view="adminView">Администрирование</button>
+      </nav>
+
+      <section id="weeklyView" class="content-view">
+        <div class="section-heading"><div><h2>Меню на неделю</h2><p>Ваш личный план питания.</p></div><button id="saveWeekBtn" class="btn btn-primary">Сохранить меню</button></div>
+        <div class="week-toolbar"><button id="prevWeekBtn" class="btn btn-outline">← Предыдущая</button><b id="weekRange"></b><button id="nextWeekBtn" class="btn btn-outline">Следующая →</button></div>
+        <div id="weekGrid" class="week-grid"></div>
+        <p class="hint">Изменения меню сохраняются в облачную базу данных только после нажатия «Сохранить меню».</p>
+      </section>
+
+      <section id="recipesView" class="content-view hidden">
+        <div class="section-heading"><div><h2>Рецепты</h2><p>Общая коллекция блюд сайта.</p></div><button id="addRecipeBtn" class="btn btn-primary">＋ Добавить рецепт</button></div>
+        <div id="recipesGrid" class="recipes-grid"></div>
+      </section>
+
+      <section id="shoppingView" class="content-view hidden">
+        <div class="section-heading"><div><h2>Список покупок</h2><p>Составьте список продуктов на неделю.</p></div></div>
+        <form id="shoppingForm" class="inline-form"><input id="shoppingInput" required maxlength="120" placeholder="Например, помидоры"><button class="btn btn-primary">Добавить</button></form>
+        <div id="shoppingList" class="shopping-list"></div>
+      </section>
+
+      <section id="adminView" class="content-view hidden">
+        <div class="section-heading"><div><span class="eyebrow">ТОЛЬКО ДЛЯ АДМИНИСТРАТОРОВ</span><h2>Панель администратора</h2><p>Управление пользователями и общей коллекцией рецептов.</p></div></div>
+        <div class="admin-stats"><div class="stat-card"><span>Пользователи</span><b id="userCount">—</b></div><div class="stat-card"><span>Рецепты</span><b id="recipeCount">—</b></div></div>
+        <div class="card admin-card"><div class="section-heading"><div><h3>Пользователи</h3><p>Назначение роли выполняется только администратором.</p></div><button id="refreshUsersBtn" class="btn btn-outline">Обновить</button></div><div class="table-wrap"><table><thead><tr><th>Имя</th><th>Почта</th><th>Роль</th><th>Действие</th></tr></thead><tbody id="usersTable"></tbody></table></div><p class="hint">Почта и список пользователей загружаются через защищённую серверную функцию. Для её работы выполните SQL из папки supabase.</p></div>
+        <div class="card admin-card"><div class="section-heading"><div><h3>Управление рецептами</h3><p>Добавляйте или удаляйте рецепты, доступные всем.</p></div></div><div id="adminRecipes" class="admin-recipes"></div></div>
+      </section>
+    </section>
+    <div id="globalMessage" class="toast hidden" role="status"></div>
+  </main>
+
+  <dialog id="recipeDialog" class="dialog">
+    <form id="recipeForm" method="dialog">
+      <div class="dialog-head"><div><span class="eyebrow">КОЛЛЕКЦИЯ БЛЮД</span><h2 id="recipeDialogTitle">Новый рецепт</h2></div><button type="button" id="closeRecipeDialog" class="icon-btn" aria-label="Закрыть">✕</button></div>
+      <input id="recipeId" type="hidden">
+      <div class="field"><label for="recipeName">Название блюда</label><input id="recipeName" required maxlength="120" placeholder="Курица с овощами"></div>
+      <div class="field"><label for="recipeDescription">Описание / ингредиенты</label><textarea id="recipeDescription" rows="4" maxlength="2000" placeholder="Ингредиенты и способ приготовления"></textarea></div>
+      <div class="form-two"><div class="field"><label for="recipeMinutes">Время (мин.)</label><input id="recipeMinutes" type="number" min="1" max="1440" value="30"></div><div class="field"><label for="recipePortions">Порций</label><input id="recipePortions" type="number" min="1" max="100" value="2"></div></div>
+      <p id="recipeFormMessage" class="form-message"></p><button class="btn btn-primary btn-full" type="submit">Сохранить рецепт</button>
+    </form>
+  </dialog>
+</body>
+</html>
